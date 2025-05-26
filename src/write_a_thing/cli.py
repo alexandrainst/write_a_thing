@@ -37,6 +37,7 @@ def main(prompt: str, file: list[str], model: str) -> None:
     litellm.suppress_debug_info = True
     logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
     logging.getLogger("httpx").setLevel(logging.CRITICAL)
+    logging.getLogger("docling").setLevel(logging.CRITICAL)
     logging.getLogger("docling.document_converter").setLevel(logging.CRITICAL)
     logging.getLogger("docling.pipeline.base_pipeline").setLevel(logging.CRITICAL)
 
