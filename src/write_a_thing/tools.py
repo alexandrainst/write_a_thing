@@ -27,6 +27,68 @@ def ask_user(question: str) -> str:
 
 
 @tool
+def count_words(text: str) -> int:
+    """Count the number of words in the given text.
+
+    Args:
+        text:
+            The text to count words in.
+
+    Returns:
+        The number of words in the text.
+    """
+    logger.info("🧮 Counting words in the text...")
+    return len(text.split())
+
+
+@tool
+def count_characters(text: str) -> int:
+    """Count the number of characters in the given text.
+
+    Args:
+        text:
+            The text to count characters in.
+
+    Returns:
+        The number of characters in the text.
+    """
+    logger.info("🧮 Counting characters in the text...")
+    return len(text)
+
+
+@tool
+def count_lines(text: str) -> int:
+    """Count the number of lines in the given text.
+
+    Args:
+        text:
+            The text to count lines in.
+
+    Returns:
+        The number of lines in the text.
+    """
+    logger.info("🧮 Counting lines in the text...")
+    return len(text.splitlines())
+
+
+@tool
+def count_pages(text: str) -> int:
+    """Count the number of pages in the given text.
+
+    This assumes that a page contains approximately 2400 characters.
+
+    Args:
+        text:
+            The text to count pages in.
+
+    Returns:
+        The estimated number of pages in the text.
+    """
+    logger.info("🧮 Counting pages in the text...")
+    return len(text) // 2400 + (1 if len(text) % 2400 > 0 else 0)
+
+
+@tool
 def load_document(file_path: str) -> str:
     """Load a document from the given file path.
 
@@ -61,10 +123,6 @@ def save_as_word(markdown_content: str, output_path: str) -> bool:
 
     Returns:
         The path to the saved Word document.
-
-    Raises:
-        FileExistsError: If the output file already exists.
-        ValueError: If the content could not be parsed.
     """
     logger.info(f"💾 Saving document as Word at {output_path}...")
 
@@ -74,7 +132,7 @@ def save_as_word(markdown_content: str, output_path: str) -> bool:
         if version_number_match is not None:
             version_number = int(version_number_match.group(0))
             output_path_obj = output_path_obj.with_name(
-                output_path_obj.stem.replace(
+                output_path_obj.name.replace(
                     f"v{version_number}", f"v{version_number + 1}"
                 )
             )

@@ -4,10 +4,18 @@ from pathlib import Path
 
 from smolagents import AgentLogger, LiteLLMModel, LogLevel, ToolCallingAgent
 
-from .tools import ask_user, load_document, save_as_word
+from .tools import (
+    ask_user,
+    count_characters,
+    count_lines,
+    count_pages,
+    count_words,
+    load_document,
+    save_as_word,
+)
 
 
-def write(prompt: str, file_paths: list[Path], model: str) -> None:
+def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -> None:
     """Write a thing using LLMs and store it as a Word document.
 
     Args:
@@ -17,10 +25,20 @@ def write(prompt: str, file_paths: list[Path], model: str) -> None:
             A list of file paths to documents that provide context for the writing.
         model:
             The LiteLLM model ID to use for the agent.
+        temperature:
+            The temperature to use for the model. Use 0.0 for greedy decoding.
     """
     writer = ToolCallingAgent(
-        tools=[ask_user, load_document, save_as_word],
-        model=LiteLLMModel(model_id=model),
+        tools=[
+            count_characters,
+            count_words,
+            count_lines,
+            count_pages,
+            ask_user,
+            load_document,
+            save_as_word,
+        ],
+        model=LiteLLMModel(model_id=model, temperature=temperature),
         logger=AgentLogger(level=LogLevel.ERROR),
     )
     file_paths_str = "\n".join(file_path.as_posix() for file_path in file_paths)
@@ -59,7 +77,10 @@ def write(prompt: str, file_paths: list[Path], model: str) -> None:
             - Use double newlines instead of single newlines.
             - Use "- " for bullet points and "1." for numbered lists.
             - Always include double newlines before a bulleted or numbered list.
-            - Do not mention the file names, file paths, or the tone of the document
+            - Do not mention the file names or file paths in the document.
+            - Do not mention the tone or length of the document in the document itself.
+
+            Always double-check that the document satisfies all of these requirements.
 
 
             ### Revision Process

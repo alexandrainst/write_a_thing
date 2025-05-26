@@ -32,7 +32,14 @@ logger = logging.getLogger("write_a_thing")
     show_default=True,
     help="The model to use for the agents.",
 )
-def main(prompt: str, file: list[str], model: str) -> None:
+@click.option(
+    "--temperature",
+    type=float,
+    default=0.0,
+    show_default=True,
+    help="The temperature to use for the model. Use 0.0 for greedy decoding.",
+)
+def main(prompt: str, file: list[str], model: str, temperature: float) -> None:
     """Write a thing using a prompt and an optional file."""
     # Suppress logging
     litellm.suppress_debug_info = True
@@ -43,7 +50,12 @@ def main(prompt: str, file: list[str], model: str) -> None:
 
     # Write the thing and store it as a Word document
     logger.info("✍️ Writing your thing...")
-    write(prompt=prompt, file_paths=[Path(f) for f in file], model=model)
+    write(
+        prompt=prompt,
+        file_paths=[Path(f) for f in file],
+        model=model,
+        temperature=temperature,
+    )
 
 
 if __name__ == "__main__":
