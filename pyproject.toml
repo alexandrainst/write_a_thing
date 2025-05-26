@@ -1,6 +1,6 @@
 [project]
 name = "write_a_thing"
-version = "0.2.0"
+version = "0.2.0.dev"
 description = "Use LLMs to help you write your things."
 readme = "README.md"
 authors = [
