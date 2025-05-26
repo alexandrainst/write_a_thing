@@ -37,11 +37,13 @@ def main(prompt: str, file: list[str], model: str) -> None:
     litellm.suppress_debug_info = True
     logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
     logging.getLogger("httpx").setLevel(logging.CRITICAL)
-
-    logger.info("✍️ Writing your thing...")
+    logging.getLogger("docling.document_converter").setLevel(logging.CRITICAL)
+    logging.getLogger("docling.pipeline.base_pipeline").setLevel(logging.CRITICAL)
 
     # Write the thing and store it as a Word document
-    write(prompt=prompt, file_paths=[Path(f) for f in file], model=model)
+    logger.info("✍️ Writing your thing...")
+    response = write(prompt=prompt, file_paths=[Path(f) for f in file], model=model)
+    logger.info(f"✅ {response}")
 
 
 if __name__ == "__main__":
