@@ -522,16 +522,52 @@
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
-<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="sd">&quot;&quot;&quot;Writing things with LLMs.&quot;&quot;&quot;</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="sd">&quot;&quot;&quot;Writing things with LLMs.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">smolagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentLogger</span><span class="p">,</span> <span class="n">LiteLLMModel</span><span class="p">,</span> <span class="n">LogLevel</span><span class="p">,</span> <span class="n">ToolCallingAgent</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">ask_user</span><span class="p">,</span> <span class="n">load_document</span><span class="p">,</span> <span class="n">save_as_word</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tools</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ask_user</span><span class="p">,</span>
+    <span class="n">count_characters</span><span class="p">,</span>
+    <span class="n">count_lines</span><span class="p">,</span>
+    <span class="n">count_pages</span><span class="p">,</span>
+    <span class="n">count_words</span><span class="p">,</span>
+    <span class="n">load_document</span><span class="p">,</span>
+    <span class="n">save_as_word</span><span class="p">,</span>
+<span class="p">)</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.writing.write"><a href="../../../api/write_a_thing/writing/#write_a_thing.writing.write" title="Go to docs">[docs]</a></div>
+<div class="mkapi-source-link" id="write_a_thing.writing.write"><a href="../../../api/write_a_thing/writing/#write_a_thing.writing.write" title="Go to docs">[docs]</a></div>
+<span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write a thing using LLMs and store it as a Word document.</span>
 
 <span class="sd">    Args:</span>
@@ -541,18 +577,24 @@
 <span class="sd">            A list of file paths to documents that provide context for the writing.</span>
 <span class="sd">        model:</span>
 <span class="sd">            The LiteLLM model ID to use for the agent.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The final answer from the agent, which contains the path to the saved Word</span>
-<span class="sd">        document.</span>
+<span class="sd">        temperature:</span>
+<span class="sd">            The temperature to use for the model. Use 0.0 for greedy decoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">writer</span> <span class="o">=</span> <span class="n">ToolCallingAgent</span><span class="p">(</span>
-        <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">ask_user</span><span class="p">,</span> <span class="n">load_document</span><span class="p">,</span> <span class="n">save_as_word</span><span class="p">],</span>
-        <span class="n">model</span><span class="o">=</span><span class="n">LiteLLMModel</span><span class="p">(</span><span class="n">model_id</span><span class="o">=</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">tools</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">count_characters</span><span class="p">,</span>
+            <span class="n">count_words</span><span class="p">,</span>
+            <span class="n">count_lines</span><span class="p">,</span>
+            <span class="n">count_pages</span><span class="p">,</span>
+            <span class="n">ask_user</span><span class="p">,</span>
+            <span class="n">load_document</span><span class="p">,</span>
+            <span class="n">save_as_word</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">LiteLLMModel</span><span class="p">(</span><span class="n">model_id</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">),</span>
         <span class="n">logger</span><span class="o">=</span><span class="n">AgentLogger</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">ERROR</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">file_paths_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span> <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">)</span>
-    <span class="n">final_answer</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">task</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            You have to write a document based on the following instructions:</span>
 
@@ -566,29 +608,43 @@
 <span class="s2">            </span><span class="si">{</span><span class="n">file_paths_str</span><span class="si">}</span>
 <span class="s2">            &lt;/documents&gt;</span>
 
+
+<span class="s2">            ### Questions to Ask the User</span>
+
 <span class="s2">            You should have answers of the following questions before you start writing:</span>
 
-<span class="s2">            &lt;questions&gt;</span>
-<span class="s2">            1. How long should the document be?</span>
-<span class="s2">            2. What tone should the document have (e.g., formal, informal, technical)?</span>
-<span class="s2">            &lt;/questions&gt;</span>
+<span class="s2">            - How long should the document be?</span>
+<span class="s2">            - What tone should the document have (e.g., formal, informal, technical)?</span>
 
 <span class="s2">            Only ask these questions if the user has not provided answers to them yet.</span>
 <span class="s2">            Also, if it is not clear to you how the files should be used, you should</span>
 <span class="s2">            ask the user for clarification. Always try to deduce the answers to all</span>
 <span class="s2">            questions yourself, but if you cannot, ask the user.</span>
 
-<span class="s2">            The final document should be written in Markdown format, and it should</span>
-<span class="s2">            include headings, paragraphs, lists, and any other formatting that is</span>
-<span class="s2">            appropriate for the content. Use double newlines instead of single newlines.</span>
 
-<span class="s2">            When you are done writing the document, save the document as a Word file</span>
-<span class="s2">            with a suitable file name in snake case in the current directory, and tell</span>
-<span class="s2">            the user that the document has been saved.</span>
+<span class="s2">            ### Document Format</span>
+
+<span class="s2">            - You should write the document in Markdown format.</span>
+<span class="s2">            - The document should be well-structured, with headings, paragraphs, etc.</span>
+<span class="s2">            - Use double newlines instead of single newlines.</span>
+<span class="s2">            - Use &quot;- &quot; for bullet points and &quot;1.&quot; for numbered lists.</span>
+<span class="s2">            - Always include double newlines before a bulleted or numbered list.</span>
+<span class="s2">            - Do not mention the file names or file paths in the document.</span>
+<span class="s2">            - Do not mention the tone or length of the document in the document itself.</span>
+
+<span class="s2">            Always double-check that the document satisfies all of these requirements.</span>
+
+
+<span class="s2">            ### Revision Process</span>
+
+<span class="s2">            When you have finished writing the revised document, save the document as a</span>
+<span class="s2">            Word file with a suitable file name in snake case in the current directory,</span>
+<span class="s2">            and ask the user to check the document and provide feedback. If they have</span>
+<span class="s2">            any feedback then you revise the document again with a revised file name</span>
+<span class="s2">            in snake case, and save it again. If they do not have any feedback, then</span>
+<span class="s2">            you can stop the process and do not ask any more questions.</span>
 <span class="s2">        &quot;&quot;&quot;</span>
     <span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">final_answer</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;The final answer should be a string.&quot;</span>
-    <span class="k">return</span> <span class="n">final_answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
 
 
