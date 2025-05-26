@@ -1,6 +1,7 @@
 """The Command-line Interface (CLI) for writing things with LLMs."""
 
 import logging
+import warnings
 from pathlib import Path
 
 import click
@@ -35,16 +36,14 @@ def main(prompt: str, file: list[str], model: str) -> None:
     """Write a thing using a prompt and an optional file."""
     # Suppress logging
     litellm.suppress_debug_info = True
-    logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
-    logging.getLogger("httpx").setLevel(logging.CRITICAL)
-    logging.getLogger("docling").setLevel(logging.CRITICAL)
-    logging.getLogger("docling.document_converter").setLevel(logging.CRITICAL)
-    logging.getLogger("docling.pipeline.base_pipeline").setLevel(logging.CRITICAL)
+    warnings.filterwarnings("ignore", category=UserWarning)
+    for logging_name in logging.root.manager.loggerDict:
+        if logging_name != "write_a_thing":
+            logging.getLogger(logging_name).setLevel(logging.CRITICAL)
 
     # Write the thing and store it as a Word document
     logger.info("✍️ Writing your thing...")
-    response = write(prompt=prompt, file_paths=[Path(f) for f in file], model=model)
-    logger.info(f"✅ {response}")
+    write(prompt=prompt, file_paths=[Path(f) for f in file], model=model)
 
 
 if __name__ == "__main__":
