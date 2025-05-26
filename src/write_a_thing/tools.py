@@ -1,11 +1,14 @@
 """The tools used by the agents."""
 
+import logging
 import os
 
 import pypandoc
 from docling.document_converter import DocumentConverter
 from docling.exceptions import ConversionError
 from smolagents import tool
+
+logger = logging.getLogger("write_a_thing")
 
 
 @tool
@@ -35,6 +38,7 @@ def load_document(file_path: str) -> str:
     Returns:
         The Markdown parsed content of the document.
     """
+    logger.info(f"📄 Loading document from {file_path}...")
     try:
         converter = DocumentConverter()
         docling_doc = converter.convert(source=file_path).document
@@ -61,6 +65,7 @@ def save_as_word(markdown_content: str, output_path: str) -> str:
         FileExistsError: If the output file already exists.
         ValueError: If the content could not be parsed.
     """
+    logger.info(f"💾 Saving document as Word at {output_path}...")
     if os.path.exists(output_path):
         raise FileExistsError(
             f"The file {output_path} already exists. Please choose a different name."

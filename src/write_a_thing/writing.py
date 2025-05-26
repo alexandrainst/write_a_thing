@@ -42,20 +42,21 @@ def write(prompt: str, file_paths: list[Path], model: str) -> str:
             {file_paths_str}
             </documents>
 
-            You should always have answers of the following questions before you start
-            writing:
+            You should have answers of the following questions before you start writing:
 
             <questions>
             1. How long should the document be?
             2. What tone should the document have (e.g., formal, informal, technical)?
             </questions>
 
-            If the user has already provided answers to these questions, you should
-            not ask them again. But if the user has not provided answers, you should ask
-            the user these questions one by one and wait for their response.
-
+            Only ask these questions if the user has not provided answers to them yet.
             Also, if it is not clear to you how the files should be used, you should
-            ask the user for clarification.
+            ask the user for clarification. Always try to deduce the answers to all
+            questions yourself, but if you cannot, ask the user.
+
+            The final document should be written in Markdown format, and it should
+            include headings, paragraphs, lists, and any other formatting that is
+            appropriate for the content. Use double newlines instead of single newlines.
 
             When you are done writing the document, save the document as a Word file
             with a suitable file name in snake case in the current directory, and tell
