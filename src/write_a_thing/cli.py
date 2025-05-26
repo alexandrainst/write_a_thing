@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from .writing import write
 
-load_dotenv()
+load_dotenv(dotenv_path=".env")
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("write_a_thing")
