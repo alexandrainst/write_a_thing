@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Now automatically stores documents in version-indexed files, when the file already
   exists.
 
+### Changed
+- Prompt improvements.
+
 ### Fixed
 - Correctly detects location of `.env` file in the current working directory.
 - Disables logging from other packages to avoid cluttering the output.

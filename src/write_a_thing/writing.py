@@ -7,7 +7,7 @@ from smolagents import AgentLogger, LiteLLMModel, LogLevel, ToolCallingAgent
 from .tools import ask_user, load_document, save_as_word
 
 
-def write(prompt: str, file_paths: list[Path], model: str) -> str:
+def write(prompt: str, file_paths: list[Path], model: str) -> None:
     """Write a thing using LLMs and store it as a Word document.
 
     Args:
@@ -17,10 +17,6 @@ def write(prompt: str, file_paths: list[Path], model: str) -> str:
             A list of file paths to documents that provide context for the writing.
         model:
             The LiteLLM model ID to use for the agent.
-
-    Returns:
-        The final answer from the agent, which contains the path to the saved Word
-        document.
     """
     writer = ToolCallingAgent(
         tools=[ask_user, load_document, save_as_word],
@@ -28,7 +24,7 @@ def write(prompt: str, file_paths: list[Path], model: str) -> str:
         logger=AgentLogger(level=LogLevel.ERROR),
     )
     file_paths_str = "\n".join(file_path.as_posix() for file_path in file_paths)
-    final_answer = writer.run(
+    writer.run(
         task=f"""
             You have to write a document based on the following instructions:
 
@@ -42,26 +38,37 @@ def write(prompt: str, file_paths: list[Path], model: str) -> str:
             {file_paths_str}
             </documents>
 
+
+            ### Questions to Ask the User
+
             You should have answers of the following questions before you start writing:
 
-            <questions>
-            1. How long should the document be?
-            2. What tone should the document have (e.g., formal, informal, technical)?
-            </questions>
+            - How long should the document be?
+            - What tone should the document have (e.g., formal, informal, technical)?
 
             Only ask these questions if the user has not provided answers to them yet.
             Also, if it is not clear to you how the files should be used, you should
             ask the user for clarification. Always try to deduce the answers to all
             questions yourself, but if you cannot, ask the user.
 
-            The final document should be written in Markdown format, and it should
-            include headings, paragraphs, lists, and any other formatting that is
-            appropriate for the content. Use double newlines instead of single newlines.
 
-            When you are done writing the document, save the document as a Word file
-            with a suitable file name in snake case in the current directory, and tell
-            the user that the document has been saved.
+            ### Document Format
+
+            - You should write the document in Markdown format.
+            - The document should be well-structured, with headings, paragraphs, etc.
+            - Use double newlines instead of single newlines.
+            - Use "- " for bullet points and "1." for numbered lists.
+            - Always include double newlines before a bulleted or numbered list.
+            - Do not mention the file names, file paths, or the tone of the document
+
+
+            ### Revision Process
+
+            When you have finished writing the revised document, save the document as a
+            Word file with a suitable file name in snake case in the current directory,
+            and ask the user to check the document and provide feedback. If they have
+            any feedback then you revise the document again with a revised file name
+            in snake case, and save it again. If they do not have any feedback, then
+            you can stop the process and do not ask any more questions.
         """
     )
-    assert isinstance(final_answer, str), "The final answer should be a string."
-    return final_answer.strip()
