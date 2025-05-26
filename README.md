@@ -13,7 +13,7 @@ Use LLMs to help you write your things.
 
 ______________________________________________________________________
 [![Documentation](https://img.shields.io/badge/docs-passing-green)](https://alexandrainst.github.io/write_a_thing)
-[![PyPI Status](https://badge.fury.io/py/euroeval.svg)](https://pypi.org/project/euroeval/)
+[![PyPI Status](https://badge.fury.io/py/write_a_thing.svg)](https://pypi.org/project/write_a_thing/)
 [![License](https://img.shields.io/github/license/alexandrainst/write_a_thing)](https://github.com/alexandrainst/write_a_thing/blob/main/LICENSE)
 [![LastCommit](https://img.shields.io/github/last-commit/alexandrainst/write_a_thing)](https://github.com/alexandrainst/write_a_thing/commits/main)
 [![Code Coverage](https://img.shields.io/badge/Coverage-53%25-orange.svg)](https://github.com/alexandrainst/write_a_thing/tree/main/tests)
