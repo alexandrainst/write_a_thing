@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+
+
+
+## [v0.2.0] - 2025-05-26
 ### Added
 - Now automatically stores documents in version-indexed files, when the file already
   exists.
