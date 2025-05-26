@@ -19,9 +19,11 @@ ______________________________________________________________________
 [![Code Coverage](https://img.shields.io/badge/Coverage-53%25-orange.svg)](https://github.com/alexandrainst/write_a_thing/tree/main/tests)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](https://github.com/alexandrainst/write_a_thing/blob/main/CODE_OF_CONDUCT.md)
 
-Developer:
 
-- Dan Saattrup Nielsen (dan.nielsen@alexandra.dk)
+## Maintainers
+
+- Dan Saattrup Nielsen ([@saattrupdan](https://github.com/saattrupdan),
+  dan.nielsen@alexandra.dk)
 
 
 ## Quickstart
