@@ -1,7 +1,8 @@
 """The tools used by the agents."""
 
 import logging
-import os
+import re
+from pathlib import Path
 
 import pypandoc
 from docling.document_converter import DocumentConverter
@@ -22,7 +23,7 @@ def ask_user(question: str) -> str:
     Returns:
         The user's response to the question.
     """
-    return input(f"Question for you: {question}\n> ")
+    return input(f"❓ {question}\n👉 ")
 
 
 @tool
@@ -49,7 +50,7 @@ def load_document(file_path: str) -> str:
 
 
 @tool
-def save_as_word(markdown_content: str, output_path: str) -> str:
+def save_as_word(markdown_content: str, output_path: str) -> bool:
     """Save the given Markdown content as a Word document.
 
     Args:
@@ -66,10 +67,27 @@ def save_as_word(markdown_content: str, output_path: str) -> str:
         ValueError: If the content could not be parsed.
     """
     logger.info(f"💾 Saving document as Word at {output_path}...")
-    if os.path.exists(output_path):
-        raise FileExistsError(
-            f"The file {output_path} already exists. Please choose a different name."
-        )
-    return pypandoc.convert_text(
-        source=markdown_content, to="docx", format="markdown", outputfile=output_path
+
+    output_path_obj = Path(output_path)
+    while output_path_obj.exists():
+        version_number_match = re.search(r"(?<=v)[1-9]$", output_path_obj.stem)
+        if version_number_match is not None:
+            version_number = int(version_number_match.group(0))
+            output_path_obj = output_path_obj.with_name(
+                output_path_obj.stem.replace(
+                    f"v{version_number}", f"v{version_number + 1}"
+                )
+            )
+        else:
+            output_path_obj = output_path_obj.with_name(
+                f"{output_path_obj.stem}-v1{output_path_obj.suffix}"
+            )
+
+    pypandoc.convert_text(
+        source=markdown_content,
+        to="docx",
+        format="markdown",
+        outputfile=output_path_obj.as_posix(),
     )
+    logger.info(f"✅ All done! Document saved at {output_path_obj.as_posix()}.")
+    return True
