@@ -12,10 +12,11 @@
 Use LLMs to help you write your things.
 
 ______________________________________________________________________
-[![Code Coverage](https://img.shields.io/badge/Coverage-53%25-orange.svg)](https://github.com/alexandrainst/write_a_thing/tree/main/tests)
 [![Documentation](https://img.shields.io/badge/docs-passing-green)](https://alexandrainst.github.io/write_a_thing)
+[![PyPI Status](https://badge.fury.io/py/euroeval.svg)](https://pypi.org/project/euroeval/)
 [![License](https://img.shields.io/github/license/alexandrainst/write_a_thing)](https://github.com/alexandrainst/write_a_thing/blob/main/LICENSE)
 [![LastCommit](https://img.shields.io/github/last-commit/alexandrainst/write_a_thing)](https://github.com/alexandrainst/write_a_thing/commits/main)
+[![Code Coverage](https://img.shields.io/badge/Coverage-53%25-orange.svg)](https://github.com/alexandrainst/write_a_thing/tree/main/tests)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](https://github.com/alexandrainst/write_a_thing/blob/main/CODE_OF_CONDUCT.md)
 
 Developer:
