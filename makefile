@@ -34,7 +34,6 @@ install: ## Install dependencies
 	@$(MAKE) --quiet setup-environment-variables
 	@$(MAKE) --quiet setup-git
 	@$(MAKE) --quiet install-pre-commit
-	@$(MAKE) --quiet add-repo-to-git
 	@echo "Installed the 'write_a_thing' project! You can now activate your virtual environment with 'source .venv/bin/activate'."
 	@echo "Note that this is a 'uv' project. Use 'uv add <package>' to install new dependencies and 'uv remove <package>' to remove them."
 
@@ -73,15 +72,6 @@ setup-git:
 	@git config --local user.name "${GIT_NAME}"
 	@git config --local user.email "${GIT_EMAIL}"
 
-add-repo-to-git:
-	@if [ ! "$(shell git status --short)" = "" ] && [ "$(shell git --no-pager log --all | sed 's/`//g')" = "" ]; then \
-		git add .; \
-		git commit --quiet -m "Initial commit"; \
-	fi
-	@if [ "$(shell git remote)" = "" ]; then \
-		git remote add origin git@github.com:alexandrainst/write_a_thing.git; \
-	fi
-
 docs:  ## View documentation locally
 	@echo "Viewing documentation - run 'make publish-docs' to publish the documentation website."
 	@uv run mkdocs serve
@@ -115,3 +105,46 @@ type-check:  ## Type-check the project
 		--check-untyped-defs
 
 check: lint format type-check  ## Lint, format, and type-check the code
+
+bump-major:
+	@uv run python -m src.scripts.versioning --major
+	@echo "Bumped major version!"
+
+bump-minor:
+	@uv run python -m src.scripts.versioning --minor
+	@echo "Bumped minor version!"
+
+bump-patch:
+	@uv run python -m src.scripts.versioning --patch
+	@echo "Bumped patch version!"
+
+add-dev-version:
+	@if [ $$(uname) = "Darwin" ]; then \
+		sed -i '' 's/^version = "\(.*\)"/version = "\1.dev"/' pyproject.toml; \
+	else \
+		sed -i 's/^version = "\(.*\)"/version = "\1.dev"/' pyproject.toml; \
+	fi
+	@uv lock
+	@git add pyproject.toml uv.lock
+	@git commit -m "chore: Add '.dev' suffix to the version number"
+	@git push
+	@echo "Added '.dev' suffix to the version number."
+
+publish:
+	@if [ ${PYPI_API_TOKEN} = "" ]; then \
+		echo "No PyPI API token specified in the '.env' file, so cannot publish."; \
+	else \
+		echo "Publishing to PyPI..."; \
+		rm -rf build/ dist/ \
+			&& uv build \
+			&& uv publish --username "__token__" --password ${PYPI_API_TOKEN} \
+			&& $(MAKE) --quiet publish-docs \
+			&& $(MAKE) --quiet add-dev-version \
+			&& echo "Published!"; \
+	fi
+
+publish-major: bump-major publish  ## Publish a major version
+
+publish-minor: bump-minor publish  ## Publish a minor version
+
+publish-patch: bump-patch publish  ## Publish a patch version
