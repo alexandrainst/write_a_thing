@@ -8,6 +8,7 @@ from pathlib import Path
 import pypandoc
 from docling.document_converter import DocumentConverter
 from docling.exceptions import ConversionError
+from emoji import is_emoji
 from smolagents import tool
 
 logger = logging.getLogger("write_a_thing")
@@ -39,7 +40,15 @@ def broadcast(message: str) -> str:
 
     Returns:
         A confirmation message stating whether the writing process has been initiated.
+
+    Raises:
+        ValueError:
+            If the message does not start with an emoji.
     """
+    # If the message does not start with an emoji, raise an error.
+    if not message or not is_emoji(string=message[0]):
+        raise ValueError("Broadcast messages must start with an emoji.")
+
     logger.info(message)
     return "Successfully broadcasted the message."
 
