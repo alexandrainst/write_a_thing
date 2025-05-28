@@ -11,6 +11,7 @@ from .tools import (
     count_pages,
     count_words,
     load_document,
+    open_word_document,
     save_as_word,
 )
 
@@ -37,6 +38,7 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             ask_user,
             load_document,
             save_as_word,
+            open_word_document,
         ],
         model=LiteLLMModel(model_id=model, temperature=temperature),
         logger=AgentLogger(level=LogLevel.ERROR),
@@ -70,7 +72,7 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             questions yourself, but if you cannot, ask the user.
 
 
-            ### Document Format
+            ### Requirements
 
             - You should write the document in Markdown format.
             - The document should be well-structured, with headings, paragraphs, etc.
@@ -80,17 +82,20 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             - Do not mention the file names or file paths in the document.
             - Do not mention the tone or length of the document in the document itself.
 
-            Always double-check that the document satisfies all of these requirements.
-
 
             ### Revision Process
 
-            When you have finished writing the revised document, save the document as a
-            Word file with a suitable file name in snake case in the current directory,
-            and ask the user if you should open the generated document for them and urge
-            them to check the document and provide feedback. If they have any feedback
-            then you revise the document again with a revised file name in snake case,
-            and save it again. If they do not have any feedback, then you can stop the
-            process and do not ask any more questions.
+            When you have finished writing the document, follow the following steps:
+
+            1. Check yourself if the document satisfies all the requirements. If not,
+               then fix the document and repeat this step.
+            2. Save the document as a Word file with a suitable file name in snake case
+               in the current directory.
+            3. Ask the user if they want to open the generated document, and open it if
+               they agree.
+            4. Ask the user if they have any feedback on the document. If they do,
+               fix the document based on their feedback, and go back to step 1.
+            5. If they do not have any feedback, then stop the process and do not ask
+               any more questions.
         """
     )
