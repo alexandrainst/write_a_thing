@@ -40,14 +40,12 @@ def broadcast(message: str) -> str:
 
     Returns:
         A confirmation message stating whether the writing process has been initiated.
-
-    Raises:
-        ValueError:
-            If the message does not start with an emoji.
     """
-    # If the message does not start with an emoji, raise an error.
     if not message or not is_emoji(string=message[0]):
-        raise ValueError("Broadcast messages must start with an emoji.")
+        return (
+            "Broadcast failed as your message did not start with an emoji. Please "
+            "try again."
+        )
 
     logger.info(message)
     return "Successfully broadcasted the message."
