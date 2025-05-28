@@ -1,7 +1,10 @@
 """Writing things with LLMs."""
 
+import logging
+import warnings
 from pathlib import Path
 
+import litellm
 from smolagents import AgentLogger, LiteLLMModel, LogLevel, ToolCallingAgent
 
 from .tools import (
@@ -12,6 +15,8 @@ from .tools import (
     open_word_document,
     save_as_word,
 )
+
+logger = logging.getLogger("write_a_thing")
 
 
 def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -> None:
@@ -27,6 +32,14 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
         temperature:
             The temperature to use for the model. Use 0.0 for greedy decoding.
     """
+    # Suppress logging
+    litellm.suppress_debug_info = True
+    warnings.filterwarnings("ignore", category=UserWarning)
+    for logging_name in logging.root.manager.loggerDict:
+        if logging_name != "write_a_thing":
+            logging.getLogger(logging_name).setLevel(logging.CRITICAL)
+
+    logger.info("🥱 Waking up the agent...")
     writer = ToolCallingAgent(
         tools=[
             ask_user,

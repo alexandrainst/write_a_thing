@@ -1,11 +1,9 @@
 """The Command-line Interface (CLI) for writing things with LLMs."""
 
 import logging
-import warnings
 from pathlib import Path
 
 import click
-import litellm
 from dotenv import load_dotenv
 
 from .writing import write
@@ -41,15 +39,6 @@ logger = logging.getLogger("write_a_thing")
 )
 def main(prompt: str, file: list[str], model: str, temperature: float) -> None:
     """Write a thing using a prompt and an optional file."""
-    # Suppress logging
-    litellm.suppress_debug_info = True
-    warnings.filterwarnings("ignore", category=UserWarning)
-    for logging_name in logging.root.manager.loggerDict:
-        if logging_name != "write_a_thing":
-            logging.getLogger(logging_name).setLevel(logging.CRITICAL)
-
-    # Write the thing and store it as a Word document
-    logger.info("🥱 Waking up the agent...")
     write(
         prompt=prompt,
         file_paths=[Path(f) for f in file],
