@@ -2,6 +2,7 @@
 
 import logging
 import re
+import subprocess
 from pathlib import Path
 
 import pypandoc
@@ -149,3 +150,24 @@ def save_as_word(markdown_content: str, output_path: str) -> bool:
     )
     logger.info(f"✅ All done! Document saved at {output_path_obj.as_posix()}.")
     return True
+
+
+@tool
+def open_word_document(file_path: str) -> None:
+    """Open a Word document.
+
+    Args:
+        file_path:
+            The path to the Word document file.
+    """
+    logger.info(f"📄 Opening Word document from {file_path}...")
+    operating_system = subprocess.run(
+        ["uname", "-s"], capture_output=True, text=True
+    ).stdout.strip()
+    match operating_system:
+        case "Linux":
+            subprocess.run(["xdg-open", file_path], check=True)
+        case "Darwin":
+            subprocess.run(["open", file_path], check=True)
+        case "Windows":
+            subprocess.run(["start", file_path], shell=True, check=True)

@@ -87,9 +87,10 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
 
             When you have finished writing the revised document, save the document as a
             Word file with a suitable file name in snake case in the current directory,
-            and ask the user to check the document and provide feedback. If they have
-            any feedback then you revise the document again with a revised file name
-            in snake case, and save it again. If they do not have any feedback, then
-            you can stop the process and do not ask any more questions.
+            and ask the user if you should open the generated document for them and urge
+            them to check the document and provide feedback. If they have any feedback
+            then you revise the document again with a revised file name in snake case,
+            and save it again. If they do not have any feedback, then you can stop the
+            process and do not ask any more questions.
         """
     )
