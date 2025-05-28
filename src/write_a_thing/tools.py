@@ -73,7 +73,7 @@ def measure_document_length(text: str) -> dict[str, int]:
         characters=len(text),
         words=len(text.split()),
         lines=len(text.splitlines()),
-        pages=len(text) // 2400 + (1 if len(text) % 2400 > 0 else 0),
+        pages=len(text) // 1800 + (1 if len(text) % 1800 > 0 else 0),
     )
 
 
