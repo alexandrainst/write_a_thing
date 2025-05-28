@@ -137,7 +137,6 @@ def save_as_word(markdown_content: str, output_path: str) -> bool:
         format="markdown",
         outputfile=output_path_obj.as_posix(),
     )
-    logger.info(f"✅ All done! Document saved at {output_path_obj.as_posix()}.")
     return True
 
 
