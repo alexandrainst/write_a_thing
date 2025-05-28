@@ -6,11 +6,9 @@ from smolagents import AgentLogger, LiteLLMModel, LogLevel, ToolCallingAgent
 
 from .tools import (
     ask_user,
-    count_characters,
-    count_lines,
-    count_pages,
-    count_words,
+    broadcast,
     load_document,
+    measure_document_length,
     open_word_document,
     save_as_word,
 )
@@ -31,11 +29,9 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
     """
     writer = ToolCallingAgent(
         tools=[
-            count_characters,
-            count_words,
-            count_lines,
-            count_pages,
             ask_user,
+            broadcast,
+            measure_document_length,
             load_document,
             save_as_word,
             open_word_document,
@@ -59,28 +55,38 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             </documents>
 
 
-            ### Questions to Ask the User
+            ### Writing Process
 
             You should have answers of the following questions before you start writing:
 
-            - How long should the document be?
-            - What tone should the document have (e.g., formal, informal, technical)?
+            - "How long should the document be?"
+            - "What tone should the document have (e.g., formal, informal, technical)?"
+            - If you need to clarify how the given files need to be used, you can ask
+              the user.
 
-            Only ask these questions if the user has not provided answers to them yet.
-            Also, if it is not clear to you how the files should be used, you should
-            ask the user for clarification. Always try to deduce the answers to all
-            questions yourself, but if you cannot, ask the user.
+            These questions are subject to the following rules:
+
+            1. Only ask these questions if the user has not provided answers to them
+               already.
+            2. Only ask a single question at a time.
+            3. When you are ready to start writing, you should broadcast the message
+               "✍️ Writing your thing..." to the user.
+            4. During the writing process, feel free to broadcast humorous messages
+               to the user indicating that you are dawdling, getting distracted,
+               thinking about other things, etc. This is to make the writing process
+               more engaging and fun for the user. Remember that all broadcasts must
+               be brief and start with an emoji.
 
 
-            ### Requirements
+            ### Document Requirements
 
-            - You should write the document in Markdown format.
-            - The document should be well-structured, with headings, paragraphs, etc.
-            - Use double newlines instead of single newlines.
-            - Use "- " for bullet points and "1." for numbered lists.
-            - Always include double newlines before a bulleted or numbered list.
-            - Do not mention the file names or file paths in the document.
-            - Do not mention the tone or length of the document in the document itself.
+            1. You should write the document in Markdown format.
+            2. The document should be well-structured, with headings, paragraphs, etc.
+            3. Use double newlines instead of single newlines.
+            4. Use "- " for bullet points and "1." for numbered lists.
+            5. Always include double newlines before a bulleted or numbered list.
+            6. Do not mention the file names or file paths in the document.
+            7. Do not mention the tone or length of the document in the document itself.
 
 
             ### Revision Process
@@ -88,14 +94,17 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             When you have finished writing the document, follow the following steps:
 
             1. Check yourself if the document satisfies all the requirements. If not,
-               then fix the document and repeat this step.
+               then broadcast that you are revising, fix the document and repeat this
+               step. Remember that broadcasts must be brief and start with an emoji.
             2. Save the document as a Word file with a suitable file name in snake case
                in the current directory.
             3. Ask the user if they want to open the generated document, and open it if
                they agree.
             4. Ask the user if they have any feedback on the document. If they do,
-               fix the document based on their feedback, and go back to step 1.
-            5. If they do not have any feedback, then stop the process and do not ask
-               any more questions.
+               broadcast that you are revising, fix the document based on their
+               feedback, and go back to step 1. Remember that broadcasts must be
+               brief and start with an emoji.
+            5. If they do not have any feedback, then stop the process and broadcast
+               "✅ Your thing is ready!" to the user.
         """
     )

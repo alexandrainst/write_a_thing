@@ -49,7 +49,7 @@ def main(prompt: str, file: list[str], model: str, temperature: float) -> None:
             logging.getLogger(logging_name).setLevel(logging.CRITICAL)
 
     # Write the thing and store it as a Word document
-    logger.info("✍️ Writing your thing...")
+    logger.info("🥱 Waking up the agent...")
     write(
         prompt=prompt,
         file_paths=[Path(f) for f in file],

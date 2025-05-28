@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Added option for the agent to open the generated Word documents.
+- Added ability to broadcast messages to the user.
 
 
 ## [v0.2.0] - 2025-05-26

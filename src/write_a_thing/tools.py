@@ -28,65 +28,46 @@ def ask_user(question: str) -> str:
 
 
 @tool
-def count_words(text: str) -> int:
-    """Count the number of words in the given text.
+def broadcast(message: str) -> str:
+    """Broadcast a message to the user.
+
+    All broadcasts must be brief and start with an emoji.
 
     Args:
-        text:
-            The text to count words in.
+        message:
+            A message to broadcast, starting with an emoji.
 
     Returns:
-        The number of words in the text.
+        A confirmation message stating whether the writing process has been initiated.
     """
-    logger.info("🧮 Counting words in the text...")
-    return len(text.split())
+    logger.info(message)
+    return "Successfully broadcasted the message."
 
 
 @tool
-def count_characters(text: str) -> int:
-    """Count the number of characters in the given text.
+def measure_document_length(text: str) -> dict[str, int]:
+    """Measure the length of the given text.
+
+    This returns the number of characters, words, lines, and pages in the text.
 
     Args:
         text:
-            The text to count characters in.
+            The text to measure.
 
     Returns:
-        The number of characters in the text.
+        A mapping with the following keys:
+            - "characters": The number of characters in the text.
+            - "words": The number of words in the text.
+            - "lines": The number of lines in the text.
+            - "pages": The estimated number of pages in the text.
     """
-    logger.info("🧮 Counting characters in the text...")
-    return len(text)
-
-
-@tool
-def count_lines(text: str) -> int:
-    """Count the number of lines in the given text.
-
-    Args:
-        text:
-            The text to count lines in.
-
-    Returns:
-        The number of lines in the text.
-    """
-    logger.info("🧮 Counting lines in the text...")
-    return len(text.splitlines())
-
-
-@tool
-def count_pages(text: str) -> int:
-    """Count the number of pages in the given text.
-
-    This assumes that a page contains approximately 2400 characters.
-
-    Args:
-        text:
-            The text to count pages in.
-
-    Returns:
-        The estimated number of pages in the text.
-    """
-    logger.info("🧮 Counting pages in the text...")
-    return len(text) // 2400 + (1 if len(text) % 2400 > 0 else 0)
+    logger.info("🧮 Measuring text length...")
+    return dict(
+        characters=len(text),
+        words=len(text.split()),
+        lines=len(text.splitlines()),
+        pages=len(text) // 2400 + (1 if len(text) % 2400 > 0 else 0),
+    )
 
 
 @tool
@@ -106,10 +87,11 @@ def load_document(file_path: str) -> str:
     try:
         converter = DocumentConverter()
         docling_doc = converter.convert(source=file_path).document
-        return docling_doc.export_to_markdown()
+        document = docling_doc.export_to_markdown()
     except ConversionError:
         with open(file_path, "r", encoding="utf-8") as file:
-            return file.read()
+            document = file.read()
+    return document
 
 
 @tool
