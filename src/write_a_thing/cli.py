@@ -17,7 +17,7 @@ logger = logging.getLogger("write_a_thing")
 
 
 @click.command(name="write-a-thing")
-@click.argument("prompt", type=str)
+@click.argument("prompt", type=str, required=True)
 @click.option(
     "--file",
     "-f",
