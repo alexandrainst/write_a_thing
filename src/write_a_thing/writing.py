@@ -38,6 +38,7 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
         ],
         model=LiteLLMModel(model_id=model, temperature=temperature),
         logger=AgentLogger(level=LogLevel.ERROR),
+        max_steps=100,
     )
     file_paths_str = "\n".join(file_path.as_posix() for file_path in file_paths)
     writer.run(
@@ -84,7 +85,8 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             2. The document should be well-structured, with headings, paragraphs, etc.
             3. Use double newlines instead of single newlines.
             4. Use "- " for bullet points and "1." for numbered lists.
-            5. Always include double newlines before a bulleted or numbered list.
+            5. Always include double newlines before the first item in a bulleted or
+               numbered list.
             6. Do not mention the file names or file paths in the document.
             7. Do not mention the tone or length of the document in the document itself.
 
