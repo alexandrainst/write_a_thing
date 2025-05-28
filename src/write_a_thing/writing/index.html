@@ -456,115 +456,152 @@
 </span><span class="mkapi-object-kind">module</span>
 <span class="mkapi-object-name"><a href="./#write_a_thing.writing" title="write_a_thing.writing">write_a_thing.writing</a></span>
 </p>
-<div class="mkapi-source no-copy highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span>
-<span class="normal">94</span>
-<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="sd">&quot;&quot;&quot;Writing things with LLMs.&quot;&quot;&quot;</span>
+<div class="mkapi-source no-copy highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
+<span class="normal">  2</span>
+<span class="normal">  3</span>
+<span class="normal">  4</span>
+<span class="normal">  5</span>
+<span class="normal">  6</span>
+<span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="sd">&quot;&quot;&quot;Writing things with LLMs.&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">litellm</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">smolagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentLogger</span><span class="p">,</span> <span class="n">LiteLLMModel</span><span class="p">,</span> <span class="n">LogLevel</span><span class="p">,</span> <span class="n">ToolCallingAgent</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.tools</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ask_user</span><span class="p">,</span>
-    <span class="n">count_characters</span><span class="p">,</span>
-    <span class="n">count_lines</span><span class="p">,</span>
-    <span class="n">count_pages</span><span class="p">,</span>
-    <span class="n">count_words</span><span class="p">,</span>
+    <span class="n">broadcast</span><span class="p">,</span>
     <span class="n">load_document</span><span class="p">,</span>
+    <span class="n">measure_document_length</span><span class="p">,</span>
+    <span class="n">open_word_document</span><span class="p">,</span>
     <span class="n">save_as_word</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;write_a_thing&quot;</span><span class="p">)</span>
 
 <div class="mkapi-source-link" id="write_a_thing.writing.write"><a href="../../../api/write_a_thing/writing/#write_a_thing.writing.write" title="Go to docs">[docs]</a></div>
 <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -580,18 +617,26 @@
 <span class="sd">        temperature:</span>
 <span class="sd">            The temperature to use for the model. Use 0.0 for greedy decoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Suppress logging</span>
+    <span class="n">litellm</span><span class="o">.</span><span class="n">suppress_debug_info</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">logging_name</span> <span class="ow">in</span> <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">loggerDict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logging_name</span> <span class="o">!=</span> <span class="s2">&quot;write_a_thing&quot;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">logging_name</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🥱 Waking up the agent...&quot;</span><span class="p">)</span>
     <span class="n">writer</span> <span class="o">=</span> <span class="n">ToolCallingAgent</span><span class="p">(</span>
         <span class="n">tools</span><span class="o">=</span><span class="p">[</span>
-            <span class="n">count_characters</span><span class="p">,</span>
-            <span class="n">count_words</span><span class="p">,</span>
-            <span class="n">count_lines</span><span class="p">,</span>
-            <span class="n">count_pages</span><span class="p">,</span>
             <span class="n">ask_user</span><span class="p">,</span>
+            <span class="n">broadcast</span><span class="p">,</span>
+            <span class="n">measure_document_length</span><span class="p">,</span>
             <span class="n">load_document</span><span class="p">,</span>
             <span class="n">save_as_word</span><span class="p">,</span>
+            <span class="n">open_word_document</span><span class="p">,</span>
         <span class="p">],</span>
         <span class="n">model</span><span class="o">=</span><span class="n">LiteLLMModel</span><span class="p">(</span><span class="n">model_id</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">),</span>
         <span class="n">logger</span><span class="o">=</span><span class="n">AgentLogger</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">ERROR</span><span class="p">),</span>
+        <span class="n">max_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">file_paths_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span> <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">)</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
@@ -609,40 +654,61 @@
 <span class="s2">            &lt;/documents&gt;</span>
 
 
-<span class="s2">            ### Questions to Ask the User</span>
+<span class="s2">            ### Writing Process</span>
 
 <span class="s2">            You should have answers of the following questions before you start writing:</span>
 
-<span class="s2">            - How long should the document be?</span>
-<span class="s2">            - What tone should the document have (e.g., formal, informal, technical)?</span>
+<span class="s2">            - &quot;How long should the document be?&quot;</span>
+<span class="s2">            - &quot;What tone should the document have (e.g., formal, informal, technical)?&quot;</span>
+<span class="s2">            - If you need to clarify how the given files need to be used, you can ask</span>
+<span class="s2">              the user.</span>
 
-<span class="s2">            Only ask these questions if the user has not provided answers to them yet.</span>
-<span class="s2">            Also, if it is not clear to you how the files should be used, you should</span>
-<span class="s2">            ask the user for clarification. Always try to deduce the answers to all</span>
-<span class="s2">            questions yourself, but if you cannot, ask the user.</span>
+<span class="s2">            These questions are subject to the following rules:</span>
+
+<span class="s2">            1. Only ask these questions if the user has not provided answers to them</span>
+<span class="s2">               already.</span>
+<span class="s2">            2. Only ask a single question at a time.</span>
+<span class="s2">            3. When you are ready to start writing, you should broadcast the message</span>
+<span class="s2">               &quot;✍️ Writing your thing...&quot; to the user.</span>
+<span class="s2">            4. During the writing process, feel free to broadcast humorous messages</span>
+<span class="s2">               to the user indicating that you are dawdling, getting distracted,</span>
+<span class="s2">               thinking about other things, etc. This is to make the writing process</span>
+<span class="s2">               more engaging and fun for the user. Remember that all broadcasts must</span>
+<span class="s2">               be brief and start with an emoji.</span>
 
 
-<span class="s2">            ### Document Format</span>
+<span class="s2">            ### Document Requirements</span>
 
-<span class="s2">            - You should write the document in Markdown format.</span>
-<span class="s2">            - The document should be well-structured, with headings, paragraphs, etc.</span>
-<span class="s2">            - Use double newlines instead of single newlines.</span>
-<span class="s2">            - Use &quot;- &quot; for bullet points and &quot;1.&quot; for numbered lists.</span>
-<span class="s2">            - Always include double newlines before a bulleted or numbered list.</span>
-<span class="s2">            - Do not mention the file names or file paths in the document.</span>
-<span class="s2">            - Do not mention the tone or length of the document in the document itself.</span>
-
-<span class="s2">            Always double-check that the document satisfies all of these requirements.</span>
+<span class="s2">            1. You should write the document in Markdown format.</span>
+<span class="s2">            2. The document should be well-structured, with headings, paragraphs, etc.</span>
+<span class="s2">            3. Use double newlines instead of single newlines.</span>
+<span class="s2">            4. Use &quot;- &quot; for bullet points and &quot;1.&quot; for numbered lists.</span>
+<span class="s2">            5. Always include double newlines before the first item in a bulleted or</span>
+<span class="s2">               numbered list.</span>
+<span class="s2">            6. Do not mention the file names or file paths in the document.</span>
+<span class="s2">            7. Do not mention the tone or length of the document in the document itself.</span>
 
 
 <span class="s2">            ### Revision Process</span>
 
-<span class="s2">            When you have finished writing the revised document, save the document as a</span>
-<span class="s2">            Word file with a suitable file name in snake case in the current directory,</span>
-<span class="s2">            and ask the user to check the document and provide feedback. If they have</span>
-<span class="s2">            any feedback then you revise the document again with a revised file name</span>
-<span class="s2">            in snake case, and save it again. If they do not have any feedback, then</span>
-<span class="s2">            you can stop the process and do not ask any more questions.</span>
+<span class="s2">            When you have finished writing the document, follow the following steps:</span>
+
+<span class="s2">            1. Check yourself if the document satisfies all the requirements. If not,</span>
+<span class="s2">               then broadcast that you are revising, fix the document and repeat this</span>
+<span class="s2">               step. During the revision process, you can again broadcast humorous</span>
+<span class="s2">               messages as before. Remember that broadcasts must be brief and start with</span>
+<span class="s2">               an emoji.</span>
+<span class="s2">            2. Save the document as a Word file with a suitable file name in snake case</span>
+<span class="s2">               in the current directory.</span>
+<span class="s2">            3. Ask the user if they want to open the generated document, and open it if</span>
+<span class="s2">               they agree.</span>
+<span class="s2">            4. Ask the user if they have any feedback on the document. If they do,</span>
+<span class="s2">               broadcast that you are revising, fix the document based on their</span>
+<span class="s2">               feedback, and go back to step 1. During this process, you can again</span>
+<span class="s2">               broadcast humorous messages as before. Remember that broadcasts must be</span>
+<span class="s2">               brief and start with an emoji.</span>
+<span class="s2">            5. If they do not have any feedback, then stop the process and broadcast</span>
+<span class="s2">               &quot;✅ Your thing is ready!&quot; to the user.</span>
 <span class="s2">        &quot;&quot;&quot;</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>

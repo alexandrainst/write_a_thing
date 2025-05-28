@@ -430,36 +430,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#write_a_thing.tools.count_words" class="md-nav__link">
+  <a href="#write_a_thing.tools.broadcast" class="md-nav__link">
     <span class="md-ellipsis">
-      count_words
+      broadcast
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#write_a_thing.tools.count_characters" class="md-nav__link">
+  <a href="#write_a_thing.tools.measure_document_length" class="md-nav__link">
     <span class="md-ellipsis">
-      count_characters
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#write_a_thing.tools.count_lines" class="md-nav__link">
-    <span class="md-ellipsis">
-      count_lines
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#write_a_thing.tools.count_pages" class="md-nav__link">
-    <span class="md-ellipsis">
-      count_pages
+      measure_document_length
     </span>
   </a>
   
@@ -478,6 +460,15 @@
   <a href="#write_a_thing.tools.save_as_word" class="md-nav__link">
     <span class="md-ellipsis">
       save_as_word
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#write_a_thing.tools.open_word_document" class="md-nav__link">
+    <span class="md-ellipsis">
+      open_word_document
     </span>
   </a>
   
@@ -660,15 +651,28 @@
 <span class="normal">148</span>
 <span class="normal">149</span>
 <span class="normal">150</span>
-<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="sd">&quot;&quot;&quot;The tools used by the agents.&quot;&quot;&quot;</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="sd">&quot;&quot;&quot;The tools used by the agents.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pypandoc</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">docling.document_converter</span><span class="w"> </span><span class="kn">import</span> <span class="n">DocumentConverter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">docling.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConversionError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">emoji</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_emoji</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">smolagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">tool</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;write_a_thing&quot;</span><span class="p">)</span>
@@ -689,65 +693,52 @@
 
 
 <span class="nd">@tool</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">count_words</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.tools.count_words"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.count_words" title="Go to docs">[docs]</a></div>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Count the number of words in the given text.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">broadcast</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.tools.broadcast"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.broadcast" title="Go to docs">[docs]</a></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Broadcast a message to the user.</span>
+
+<span class="sd">    All broadcasts must be brief and start with an emoji.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        text:</span>
-<span class="sd">            The text to count words in.</span>
+<span class="sd">        message:</span>
+<span class="sd">            A message to broadcast, starting with an emoji.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The number of words in the text.</span>
+<span class="sd">        A confirmation message stating whether the writing process has been initiated.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧮 Counting words in the text...&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">message</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_emoji</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;Broadcast failed as your message did not start with an emoji. Please &quot;</span>
+            <span class="s2">&quot;try again.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;Successfully broadcasted the message.&quot;</span>
 
 
 <span class="nd">@tool</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">count_characters</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.tools.count_characters"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.count_characters" title="Go to docs">[docs]</a></div>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Count the number of characters in the given text.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">measure_document_length</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span><div class="mkapi-source-link" id="write_a_thing.tools.measure_document_length"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.measure_document_length" title="Go to docs">[docs]</a></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Measure the length of the given text.</span>
+
+<span class="sd">    This returns the number of characters, words, lines, and pages in the text.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        text:</span>
-<span class="sd">            The text to count characters in.</span>
+<span class="sd">            The text to measure.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The number of characters in the text.</span>
+<span class="sd">        A mapping with the following keys:</span>
+<span class="sd">            - &quot;characters&quot;: The number of characters in the text.</span>
+<span class="sd">            - &quot;words&quot;: The number of words in the text.</span>
+<span class="sd">            - &quot;lines&quot;: The number of lines in the text.</span>
+<span class="sd">            - &quot;pages&quot;: The estimated number of pages in the text.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧮 Counting characters in the text...&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-
-<span class="nd">@tool</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">count_lines</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.tools.count_lines"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.count_lines" title="Go to docs">[docs]</a></div>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Count the number of lines in the given text.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        text:</span>
-<span class="sd">            The text to count lines in.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The number of lines in the text.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧮 Counting lines in the text...&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
-
-
-<span class="nd">@tool</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">count_pages</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.tools.count_pages"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.count_pages" title="Go to docs">[docs]</a></div>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Count the number of pages in the given text.</span>
-
-<span class="sd">    This assumes that a page contains approximately 2400 characters.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        text:</span>
-<span class="sd">            The text to count pages in.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The estimated number of pages in the text.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧮 Counting pages in the text...&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2400</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2400</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧮 Measuring text length...&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">characters</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span>
+        <span class="n">words</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>
+        <span class="n">lines</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()),</span>
+        <span class="n">pages</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">//</span> <span class="mi">1800</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1800</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">)</span>
 
 
 <span class="nd">@tool</span>
@@ -767,10 +758,11 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">converter</span> <span class="o">=</span> <span class="n">DocumentConverter</span><span class="p">()</span>
         <span class="n">docling_doc</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">document</span>
-        <span class="k">return</span> <span class="n">docling_doc</span><span class="o">.</span><span class="n">export_to_markdown</span><span class="p">()</span>
+        <span class="n">document</span> <span class="o">=</span> <span class="n">docling_doc</span><span class="o">.</span><span class="n">export_to_markdown</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">ConversionError</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">document</span>
 
 
 <span class="nd">@tool</span>
@@ -811,6 +803,27 @@
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ All done! Document saved at </span><span class="si">{</span><span class="n">output_path_obj</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">open_word_document</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span><div class="mkapi-source-link" id="write_a_thing.tools.open_word_document"><a href="../../../api/write_a_thing/tools/#write_a_thing.tools.open_word_document" title="Go to docs">[docs]</a></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open a Word document.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_path:</span>
+<span class="sd">            The path to the Word document file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📄 Opening Word document from </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+    <span class="n">operating_system</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;uname&quot;</span><span class="p">,</span> <span class="s2">&quot;-s&quot;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">match</span> <span class="n">operating_system</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;Linux&quot;</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;xdg-open&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">],</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;Darwin&quot;</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">],</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 
 
