@@ -95,14 +95,17 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
 
             1. Check yourself if the document satisfies all the requirements. If not,
                then broadcast that you are revising, fix the document and repeat this
-               step. Remember that broadcasts must be brief and start with an emoji.
+               step. During the revision process, you can again broadcast humorous
+               messages as before. Remember that broadcasts must be brief and start with
+               an emoji.
             2. Save the document as a Word file with a suitable file name in snake case
                in the current directory.
             3. Ask the user if they want to open the generated document, and open it if
                they agree.
             4. Ask the user if they have any feedback on the document. If they do,
                broadcast that you are revising, fix the document based on their
-               feedback, and go back to step 1. Remember that broadcasts must be
+               feedback, and go back to step 1. During this process, you can again
+               broadcast humorous messages as before. Remember that broadcasts must be
                brief and start with an emoji.
             5. If they do not have any feedback, then stop the process and broadcast
                "✅ Your thing is ready!" to the user.
