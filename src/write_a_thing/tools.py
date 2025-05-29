@@ -11,6 +11,8 @@ from docling.exceptions import ConversionError
 from emoji import is_emoji
 from smolagents import tool
 
+from .utils import log_once
+
 logger = logging.getLogger("write_a_thing")
 
 
@@ -47,7 +49,7 @@ def broadcast(message: str) -> str:
             "try again."
         )
 
-    logger.info(message)
+    log_once(message=message)
     return "Successfully broadcasted the message."
 
 

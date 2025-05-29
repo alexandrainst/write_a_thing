@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Updated prompt to encourage more clarifying questions.
 
+### Fixed
+- Agent will never broadcast the same message twice now.
+
 
 ## [v0.3.0] - 2025-05-28
 ### Added
