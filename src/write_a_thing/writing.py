@@ -87,11 +87,6 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
             - Only ask a single question at a time.
             - When you are ready to start writing, you should broadcast the message
               "✍️ Writing your thing..." to the user.
-            - During the writing process, feel free to broadcast humorous messages
-              to the user indicating that you are dawdling, getting distracted,
-              thinking about other things, etc. This is to make the writing process
-              more engaging and fun for the user. Remember that all broadcasts must
-              be brief and start with an emoji.
 
 
             ### Document Requirements
@@ -112,19 +107,28 @@ def write(prompt: str, file_paths: list[Path], model: str, temperature: float) -
 
             1. Check yourself if the document satisfies all the requirements. If not,
                then broadcast that you are revising, fix the document and repeat this
-               step. During the revision process, you can again broadcast humorous
-               messages as before. Remember that broadcasts must be brief and start with
-               an emoji.
+               step.
             2. Save the document as a Word file with a suitable file name in snake case
                in the current directory.
             3. Ask the user if they want to open the generated document, and open it if
                they agree.
             4. Ask the user if they have any feedback on the document. If they do,
                broadcast that you are revising, fix the document based on their
-               feedback, and go back to step 1. During this process, you can again
-               broadcast humorous messages as before. Remember that broadcasts must be
-               brief and start with an emoji.
+               feedback, and go back to step 1.
             5. If they do not have any feedback, then stop the process and broadcast
                "✅ Your thing is ready!" to the user.
+
+
+            ### Broadcasting Messages
+
+            During both the writing and review processes, feel free to broadcast
+            humorous messages to the user indicating that you are dawdling, getting
+            distracted, thinking about other things, etc. This is to make the writing
+            process more engaging and fun for the user. These are subject to the
+            following rules:
+
+            - All broadcasts must be brief and start with an emoji.
+            - Do not overdo it; only broadcast a couple of times during the
+              writing and review processes.
         """
     )

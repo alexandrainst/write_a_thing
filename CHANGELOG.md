@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
-- Updated prompt to encourage more clarifying questions.
+- Updated prompt to encourage more clarifying questions and fewer broadcasts.
 
 ### Fixed
 - Agent will never broadcast the same message twice now.
