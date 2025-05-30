@@ -54,7 +54,7 @@ def broadcast(message: str) -> str:
 
 
 @tool
-def measure_document_length(text: str) -> dict[str, int]:
+def measure_document_length(text: str) -> dict[str, float | int]:
     """Measure the length of the given text.
 
     This returns the number of characters, words, lines, and pages in the text.
@@ -75,7 +75,7 @@ def measure_document_length(text: str) -> dict[str, int]:
         characters=len(text),
         words=len(text.split()),
         lines=len(text.splitlines()),
-        pages=len(text) // 1800 + (1 if len(text) % 1800 > 0 else 0),
+        pages=round(len(text) / 1800, ndigits=2),
     )
 
 
